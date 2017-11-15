@@ -1,0 +1,434 @@
+codebook
+
+--------------------------------------------------------------------------------
+sex                                                       Sex of examined person
+--------------------------------------------------------------------------------
+
+                  type:  numeric (double)
+                 label:  SEX
+
+                 range:  [1,2]                        units:  1
+         unique values:  2                        missing .:  0/14,407
+
+            tabulation:  Freq.   Numeric  Label
+                         5,810         1  Male
+                         8,597         2  Female
+
+--------------------------------------------------------------------------------
+ageexam                                                       Age at examination
+--------------------------------------------------------------------------------
+
+                  type:  numeric (double)
+
+                 range:  [25,75]                      units:  1
+         unique values:  51                       missing .:  0/14,407
+
+                  mean:   48.9449
+              std. dev:     15.59
+
+           percentiles:        10%       25%       50%       75%       90%
+                                28        35        48        65        70
+
+--------------------------------------------------------------------------------
+hdisease71                                                         Heart Disease
+--------------------------------------------------------------------------------
+
+                  type:  numeric (double)
+
+                 range:  [0,9]                        units:  1
+         unique values:  3                        missing .:  0/14,407
+
+            tabulation:  Freq.  Value
+                        13,588  0
+                           809  1
+                            10  9
+
+--------------------------------------------------------------------------------
+bmi                                                              Body mass index
+--------------------------------------------------------------------------------
+
+                  type:  numeric (double)
+
+                 range:  [12.41836,72.31405]          units:  1.000e-09
+         unique values:  13,589                   missing .:  7/14,407
+
+                  mean:   25.6394
+              std. dev:   5.15099
+
+           percentiles:        10%       25%       50%       75%       90%
+                           19.9624   22.0563   24.9308   28.2554   32.0609
+
+--------------------------------------------------------------------------------
+serum_chol                                                           Cholesterol
+--------------------------------------------------------------------------------
+
+                  type:  numeric (double)
+
+                 range:  [53,793]                     units:  1
+         unique values:  340                      missing .:  81/14,407
+
+                  mean:   220.776
+              std. dev:   48.5159
+
+           percentiles:        10%       25%       50%       75%       90%
+                               164       187       217       249       283
+
+--------------------------------------------------------------------------------
+systolic_bp                                              Systolic Blood Pressure
+--------------------------------------------------------------------------------
+
+                  type:  numeric (double)
+
+                 range:  [80,270]                     units:  1
+         unique values:  111                      missing .:  68/14,407
+
+                  mean:    134.17
+              std. dev:   24.4119
+
+           percentiles:        10%       25%       50%       75%       90%
+                               108       118       130       148       168
+
+--------------------------------------------------------------------------------
+diastolic_bp                                            Diastolic Blood Pressure
+--------------------------------------------------------------------------------
+
+                  type:  numeric (double)
+
+                 range:  [25,180]                     units:  1
+         unique values:  81                       missing .:  71/14,407
+
+                  mean:   83.5075
+              std. dev:    13.076
+
+           percentiles:        10%       25%       50%       75%       90%
+                                70        75        82        90       100
+
+. 
+. 
+. describe ageexam
+
+              storage   display    value
+variable name   type    format     label      variable label
+--------------------------------------------------------------------------------
+ageexam         double  %10.0g                Age at examination
+
+
+
+summarize
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+         sex |     14,407    1.596724    .4905723          1          2
+     ageexam |     14,407    48.94489    15.58996         25         75
+  hdisease71 |     14,407    .0624002    .3293777          0          9
+         bmi |     14,400    25.63937    5.150991   12.41836   72.31405
+  serum_chol |     14,326    220.7761    48.51591         53        793
+-------------+---------------------------------------------------------
+ systolic_bp |     14,339    134.1696    24.41194         80        270
+diastolic_bp |     14,336    83.50753    13.07599         25        180
+
+summarize, detail
+
+                   Sex of examined person
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs              14,407
+25%            1              1       Sum of Wgt.      14,407
+
+50%            2                      Mean           1.596724
+                        Largest       Std. Dev.      .4905723
+75%            2              2
+90%            2              2       Variance       .2406612
+95%            2              2       Skewness      -.3943442
+99%            2              2       Kurtosis       1.155507
+
+                     Age at examination
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%           25             25
+ 5%           26             25
+10%           28             25       Obs              14,407
+25%           35             25       Sum of Wgt.      14,407
+
+50%           48                      Mean           48.94489
+                        Largest       Std. Dev.      15.58996
+75%           65             75
+90%           70             75       Variance       243.0469
+95%           72             75       Skewness       .0643969
+99%           74             75       Kurtosis       1.615101
+
+                        Heart Disease
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              14,407
+25%            0              0       Sum of Wgt.      14,407
+
+50%            0                      Mean           .0624002
+                        Largest       Std. Dev.      .3293777
+75%            0              9
+90%            0              9       Variance       .1084897
+95%            1              9       Skewness       15.15816
+99%            1              9       Kurtosis       380.0401
+
+                       Body mass index
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     17.10563       12.41836
+ 5%     18.87443       12.57178
+10%     19.96241       12.92887       Obs              14,400
+25%      22.0563       12.97575       Sum of Wgt.      14,400
+
+50%     24.93079                      Mean           25.63937
+                        Largest       Std. Dev.      5.150991
+75%     28.25538       61.09805
+90%     32.06086       62.08575       Variance       26.53271
+95%     34.87388       63.25636       Skewness       1.270211
+99%     42.31295       72.31405       Kurtosis       6.639383
+
+                         Cholesterol
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%          127             53
+ 5%          151             75
+10%          164             78       Obs              14,326
+25%          187             79       Sum of Wgt.      14,326
+
+50%          217                      Mean           220.7761
+                        Largest       Std. Dev.      48.51591
+75%          249            537
+90%          283            591       Variance       2353.794
+95%          306            691       Skewness       .8267634
+99%          354            793       Kurtosis       6.246278
+
+                   Systolic Blood Pressure
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%           94             80
+ 5%          100             80
+10%          108             80       Obs              14,339
+25%          118             80       Sum of Wgt.      14,339
+
+50%          130                      Mean           134.1696
+                        Largest       Std. Dev.      24.41194
+75%          148            260
+90%          168            270       Variance       595.9429
+95%          180            270       Skewness       1.004466
+99%          210            270       Kurtosis       4.468155
+
+                  Diastolic Blood Pressure
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%           58             25
+ 5%           64             34
+10%           70             38       Obs              14,336
+25%           75             38       Sum of Wgt.      14,336
+
+50%           82                      Mean           83.50753
+                        Largest       Std. Dev.      13.07599
+75%           90            170
+90%          100            175       Variance       170.9815
+95%          108            180       Skewness       .6419864
+99%          120            180       Kurtosis        4.73612
+
+. 
+
+
+generate AGE_CAT = 0
+replace AGE_CAT = 1 if ageexam<=39
+replace AGE_CAT = 2 if ageexam>=40 & ageexam<=49
+replace AGE_CAT = 3 if ageexam>=50 & ageexam<=59
+replace AGE_CAT = 4 if ageexam>=60 & ageexam<=69
+replace AGE_CAT = 5 if ageexam>=70
+
+
+replace AGE_CAT = 1 if ageexam<=39
+(4,984 real changes made)
+
+replace AGE_CAT = 2 if ageexam>=40 & ageexam<=49
+(2,615 real changes made)
+
+replace AGE_CAT = 3 if ageexam>=50 & ageexam<=59
+(2,111 real changes made)
+
+replace AGE_CAT = 4 if ageexam>=60 & ageexam<=69
+(3,056 real changes made)
+
+replace AGE_CAT = 5 if ageexam>=70
+(1,641 real changes made)
+
+label define AGE_CAT1 1 "Less than 39" 2 "Ages 40-49" 3 "Ages 50-59" 4 "Ages 60-69" 5 "Ages 70 and over"
+
+label values AGE_CAT AGE_CAT1
+
+label variable AGE_CAT "Age categorical"
+
+tabulate AGE_CAT
+
+tabulate AGE_CAT
+
+ Age categorical |      Freq.     Percent        Cum.
+-----------------+-----------------------------------
+    Less than 39 |      4,984       34.59       34.59
+      Ages 40-49 |      2,615       18.15       52.75
+      Ages 50-59 |      2,111       14.65       67.40
+      Ages 60-69 |      3,056       21.21       88.61
+Ages 70 and over |      1,641       11.39      100.00
+-----------------+-----------------------------------
+           Total |     14,407      100.00
+
+
+generate AGE_CAT2 = trunc((ageexam/10)*10)
+
+tabulate AGE_CAT2
+
+   AGE_CAT2 |      Freq.     Percent        Cum.
+------------+-----------------------------------
+         25 |        384        2.67        2.67
+         26 |        438        3.04        5.71
+         27 |        371        2.58        8.28
+         28 |        406        2.82       11.10
+         29 |        345        2.39       13.49
+         30 |        343        2.38       15.87
+         31 |        318        2.21       18.08
+         32 |        319        2.21       20.30
+         33 |        288        2.00       22.29
+         34 |        300        2.08       24.38
+         35 |        317        2.20       26.58
+         36 |        294        2.04       28.62
+         37 |        281        1.95       30.57
+         38 |        272        1.89       32.46
+         39 |        308        2.14       34.59
+         40 |        298        2.07       36.66
+         41 |        288        2.00       38.66
+         42 |        305        2.12       40.78
+         43 |        297        2.06       42.84
+         44 |        286        1.99       44.83
+         45 |        224        1.55       46.38
+         46 |        212        1.47       47.85
+         47 |        236        1.64       49.49
+         48 |        247        1.71       51.20
+         49 |        222        1.54       52.75
+         50 |        249        1.73       54.47
+         51 |        216        1.50       55.97
+         52 |        211        1.46       57.44
+         53 |        232        1.61       59.05
+         54 |        234        1.62       60.67
+         55 |        205        1.42       62.09
+         56 |        212        1.47       63.57
+         57 |        196        1.36       64.93
+         58 |        175        1.21       66.14
+         59 |        181        1.26       67.40
+         60 |        171        1.19       68.58
+         61 |        178        1.24       69.82
+         62 |        162        1.12       70.94
+         63 |        164        1.14       72.08
+         64 |        164        1.14       73.22
+         65 |        509        3.53       76.75
+         66 |        461        3.20       79.95
+         67 |        428        2.97       82.92
+         68 |        434        3.01       85.94
+         69 |        385        2.67       88.61
+         70 |        359        2.49       91.10
+         71 |        362        2.51       93.61
+         72 |        333        2.31       95.93
+         73 |        306        2.12       98.05
+         74 |        257        1.78       99.83
+         75 |         24        0.17      100.00
+------------+-----------------------------------
+
+label variable AGE_CAT2 "Age categorical 2"
+
+tab sex AGE_CAT, summarize(serum_chol)
+
+         Means, Standard Deviations and Frequencies of Cholesterol
+
+    Sex of |
+  examined |                  Age categorical
+    person | Less than  Ages 40-4  Ages 50-5  Ages 60-6  Ages 70 a |     Total
+-----------+-------------------------------------------------------+----------
+      Male | 204.94437  225.10675  228.05918  227.22268  223.53238 |  220.4247
+           | 41.397084  44.380329   46.14761  49.793374   45.29649 | 46.434858
+           |      1582        993        997       1446        772 |      5790
+-----------+-------------------------------------------------------+----------
+    Female | 196.49466  216.01868  241.08743  248.67875   249.2645 | 221.01441
+           | 40.752678  44.329813  46.440811  47.799095   48.73734 | 49.879385
+           |      3370       1606       1098       1600        862 |      8536
+-----------+-------------------------------------------------------+----------
+     Total | 199.19406  219.49096  234.88735  238.49311   237.1071 | 220.77607
+           | 41.144568  44.560006  46.745717  49.911894  48.849208 | 48.515914
+           |      4952       2599       2095       3046       1634 |     14326
+
+
+label variable AGE_CAT2 "Age categorical 2"
+
+
+generate hbp = 0
+replace hbp = 1 if systolic_bp>=140 & diastolic_bp>=90
+
+generate hbp = 0
+
+replace hbp = 2 if missing(systolic_bp, diastolic_bp)
+(72 real changes made)
+
+replace hbp = 1 if systolic_bp>=140 & diastolic_bp>=90
+(3,432 real changes made)
+
+label define hbp1 0 "does not have high blood pressure " 1 "has systolic bp>=140 OR diastolic bp>=90" 
+> 2 "Missing DBP or SBP"
+
+label values hbp hbp1
+
+drop if hdisease71 == 9
+(10 observations deleted)
+
+
+tabulate sex hdisease71, chi2
+
+    Sex of |
+  examined |     Heart Disease
+    person |         0          1 |     Total
+-----------+----------------------+----------
+      Male |     5,348        456 |     5,804 
+    Female |     8,240        353 |     8,593 
+-----------+----------------------+----------
+     Total |    13,588        809 |    14,397 
+
+          Pearson chi2(1) =  91.7891   Pr = 0.000
+
+. tab hbp hdisease71, chi2
+
+                      |     Heart Disease
+                  hbp |         0          1 |     Total
+----------------------+----------------------+----------
+does not have high bl |    10,459        505 |    10,964 
+has systolic bp>=140  |     3,125        304 |     3,429 
+   Missing DBP or SBP |         4          0 |         4 
+----------------------+----------------------+----------
+                Total |    13,588        809 |    14,397 
+
+          Pearson chi2(2) =  89.6012   Pr = 0.000
+
+ttest ageexam, by(hdisease71)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+       0 |  13,588    48.10252    .1326782    15.46597    47.84245    48.36258
+       1 |     809    63.03585    .3455774    9.829233    62.35751    63.71418
+---------+--------------------------------------------------------------------
+combined |  14,397    48.94165    .1299186    15.58861      48.687    49.19631
+---------+--------------------------------------------------------------------
+    diff |           -14.93333    .5502643               -16.01192   -13.85474
+------------------------------------------------------------------------------
+    diff = mean(0) - mean(1)                                      t = -27.1385
+Ho: diff = 0                                     degrees of freedom =    14395
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.0000         Pr(|T| > |t|) = 0.0000          Pr(T > t) = 1.0000
+
+
