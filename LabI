@@ -340,19 +340,28 @@ categorica |       person
 
 graph bar (mean) serum_chol, over(AGE_CAT2) over(sex)
 
-generate hbp = 0
-replace hbp = 1 if systolic_bp>=140 & diastolic_bp>=90
+generate hbp = 1
 
-generate hbp = 0
+replace hbp = 0 if systolic_bp<140 & diastolic_bp<90
+(7,837 real changes made)
 
 replace hbp = 2 if missing(systolic_bp, diastolic_bp)
 (72 real changes made)
 
-replace hbp = 1 if systolic_bp>=140 & diastolic_bp>=90
-(3,432 real changes made)
+edit
 
-label define hbp1 0 "does not have high blood pressure " 1 "has systolic bp>=140 OR diastolic bp>=90" 
-> 2 "Missing DBP or SBP"
+tab hbp
+
+        hbp |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      7,837       54.40       54.40
+          1 |      6,498       45.10       99.50
+          2 |         72        0.50      100.00
+------------+-----------------------------------
+      Total |     14,407      100.00
+
+
+label define hbp1 0 "does not have high blood pressure " 1 "has systolic bp>=140 OR diastolic bp>=90" 2 "Missing DBP or SBP"
 
 label values hbp hbp1
 
@@ -373,18 +382,18 @@ tabulate sex hdisease71, chi2
 
           Pearson chi2(1) =  91.7891   Pr = 0.000
 
-. tab hbp hdisease71, chi2
+tab hbp hdisease71, chi2
 
                       |     Heart Disease
                   hbp |         0          1 |     Total
 ----------------------+----------------------+----------
-does not have high bl |    10,459        505 |    10,964 
-has systolic bp>=140  |     3,125        304 |     3,429 
-   Missing DBP or SBP |         4          0 |         4 
+does not have high bl |     7,565        268 |     7,833 
+has systolic bp>=140  |     5,957        536 |     6,493 
+   Missing DBP or SBP |        66          5 |        71 
 ----------------------+----------------------+----------
                 Total |    13,588        809 |    14,397 
 
-          Pearson chi2(2) =  89.6012   Pr = 0.000
+          Pearson chi2(2) = 156.6714   Pr = 0.000
 
 ttest ageexam, by(hdisease71)
 
@@ -404,5 +413,6 @@ Ho: diff = 0                                     degrees of freedom =    14395
 
     Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
  Pr(T < t) = 0.0000         Pr(|T| > |t|) = 0.0000          Pr(T > t) = 1.0000
+
 
 
