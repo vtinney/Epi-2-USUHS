@@ -299,6 +299,8 @@ tab temp
 
 label variable temp "Age categorical 2"
 
+rename temp AGE_CAT2
+
 tab AGE_CAT2 sex, summarize(serum_chol)
 
          Means, Standard Deviations and Frequencies of Cholesterol
@@ -337,8 +339,6 @@ categorica |       person
 
 
 graph bar (mean) serum_chol, over(AGE_CAT2) over(sex)
-
-label variable AGE_CAT2 "Age categorical 2"
 
 generate hbp = 0
 replace hbp = 1 if systolic_bp>=140 & diastolic_bp>=90
