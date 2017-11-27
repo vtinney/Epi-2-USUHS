@@ -1,106 +1,6 @@
 Lab 2: Prevalent Cases of Heart Disease (HD) and the population at risk for HD
 
-Due date:  November 27 Monday
 
-Goals: 
-1)	To become more proficient with STATA: Creating LOG FILE of Stata session, introduction to DO FILEs (start with template) and saving datasets.
-2)	Determine number of Prevalent HD Cases
-3)	Determine how gender is associated with HD at baseline.
-4)	Determine the association between categories of BMI and prevalent and HD (using CSI) with “normal” BMI as the reference category
-5)	Determine distributions of other factors by BMI category in population at risk for HD.  Use simple summary statistics to complete descriptive tables for the dataset
-
-Data base: PREV_HD_LAB2.dta
-The data are from a cross-sectional study of 14,407 subjects (NHANES 1 study). 
-Data Dictionary:
-AGEEXAM: Age at examination
-AGE_CAT
-	0 = 20’s
-	1 = 30’s
-	2= 40’s
-	3 = 50’s
-	4 = 60’s
-	5 = 70’s
-
-RACE: Race of examined person
-	1 = White
-	2 = Black
-	3 = Other
-
-SEX: Sex of examined person
-	1 = Male
-	2 = Female
-
-ALC_STAT71: REPORTED ALCOHOL CONSUMPTION IN 1971
-	1 = Never
-	2= Current drinker, unknown amount
-	3 = Current drinker<=0.5 drink/day
-	4 = Current drinker>0.5 drink/day
-
-BMI (KG/M2) CONTINUOUS VALUES FOR BMI
-BMI_CAT (KG/M2): BMI CATEGORIES
-	1=Underweight BMI <18.5
-	2=Normal weight BMI 18.5-24.9
-	3=Overweight BMI 25-29.9
-	4=Obese BMI 30+
-
-EDUC_CAT: HIGHEST GRADE ATTAINED IN 1971
-	1 = < HS
-	2 = HS
-	3 = SOME COLLEGE
-	4 = college+	
-
-INCOME:  FAMILY INCOME IN 1971
-	1 = Under $7000
-	2 = $7,000-9,999
-	3 = $10,000-14,999
-	4 = $15,000-19,999
-	5 = $20,000-and over
-
-PHYS_ACT71 Total Physical Activity 1971 created from a combination of non-recreational and recreational activity variables  (SEE TABLE BELOW)
-	1 = None
-	2 = Mild
-	3 = Moderate
-	4 = High
-	5 = Intense
-
-REGION OF RESIDENCE IN US
-	1 = Northeast
-	2 = Midwest
-	3 = South
-	4 = West
-
-PREVHD: Prevalent Heart Disease at baseline (Did a Doctor ever tell you that you had heart attack or other heart disease?)
-	0= NO
-	1= YES
-	9 = Unknown
-
-PHYS_ACT71 Total Physical Activity 1971 created from a combination of non-recreational and recreational activity variables  (SEE TABLE BELOW)
-	1 = None
-	2 = Mild
-	3 = Moderate
-	4 = High
-	5 = Intense
-
-
-NEW Physical Activity	Non-recreational activity	Recreational activity
-Intense (5)	1 = Much	1 = Much
-High (4)	1 = Much	2 = Moderate
-	2 = Moderate	1 = Much
-Moderate (3)	2 = Moderate	2 = Moderate
-	1 = Much	3 = Little/None
-	3 = Little/None	1 = Much
-Mild (2)	2 = Moderate	3 = Little/None
-	3 = Little/None	2 = Moderate
-Little/None (1)	3 = Little/None	3 = Little/None
-
-Lab assignment:
-Copy and paste from the results window to this Word document where indicated. The output will be more readable in Word if you use a fixed space font like Courier or SAS Monospace. Change to SINGLE SPACE. 
-1)	Read in the database and summarize the data. Make a note of missing data.
-summarize : Statistics – Summaries, tables, and tests – summary and descriptive statistics – summary statistics
-•	* Note those variables not =14407 are missing some participants.   
-•	** In some of the variables a missing value seems to be coded as a “9”
-
-VTINNEY OUTPUT:
 summarize
 
     Variable |        Obs        Mean    Std. Dev.       Min        Max
@@ -413,10 +313,6 @@ tab PREV_HD
 ------------+-----------------------------------
       Total |     14,397      100.00
 
-3)	Determine how gender is related to prevalence of HD.
-Statistics – Epidemiology and related – Tables for Epidemiologists – Cohort study risk ratios etc calculator
-VTINNEY Output: 
-I had to recode sex so that it was a dichotomous variable in order to get the odds ratio for gender and heart disease. I then did a chi square and found that the relationship between gender and heart disease is significantly higher for men than women.
 
 tab SEX PREV_HD, chi2
 
@@ -494,10 +390,6 @@ csi 456 353 5348 8240
                  +-------------------------------------------------
                                chi2(1) =    91.79  Pr>chi2 = 0.0000
 
-4)	Determine the association between categories of BMI and prevalent and HD (using CSI) with “normal” BMI as the reference category.  Interpret your findings.
-
-VTINNEY Output: 
-The odds is 99% higher (OR 1.99, CI: 1.258-3.17) for those in the highest BMI category (obese over 30 BMI), as compared to those in the underweight category (p= 0.000, as determined by chi-square test). 
 
 tab BMI_CAT PREV_HD, row column
 
@@ -592,11 +484,6 @@ csi 290 311 4418 6442
  Attr. frac. pop |         .1217631       |
                  +-------------------------------------------------
                                chi2(1) =    13.49  Pr>chi2 = 0.0002
-
-5)	Define your “AT RISK” population (Those who could develop incident HD.) Determine distributions of other factors by BMI category in population at risk for HD.  Use simple summary statistics to complete descriptive tables for the dataset.  (chi square).
-VTINNEY Output:
-Those considered to be at risk are those that are in the overweight and obese BMI categories, as well as those that live in the Southern part of the United States and males. 
-
 	keep if HDISEASE71 == 0
 (809 observations deleted)
 
@@ -716,192 +603,6 @@ csi 409 3717 84 662
  Attr. frac. pop |         .1054615       |
                  +-------------------------------------------------
                                chi2(1) =   180.46  Pr>chi2 = 0.0000
-
-Comparing distributions of categories testing with chi square:
-Statistics – summary tables and tests – frequency tables – two way tables with measures of associations
-6)	  Complete the table using the methods above:
-TITLE: Distribution of Baseline variables in NHANES I by BMI Categories 
-	Low weigh
-
-n = 522	Normal
-
-n = 6,753	Overweight
-
-n = 4,708	Obese
-
-n = 2,407	Total2
-
-n = 14,390	p value
-for chi-square
-BMI 1   Mean
-st.dev	17.44
-0.993	22.16
-1.734
-	27.16
-1.38
-	34.20
-4.47	25.64
-5.15	0.000**
--_____
-Age mean
-st.dev	46.52
-16.76	46.76
-15.78	51.33
-15.05	50.92
-14.87	48.94
-15.59	0.000**
-
-Systolic BP Mean
-St. Dev	124.25
-23.93	127.78
-22.35	136.31
-22.62	146.06
-25.65	133.41
-24.06	0.000**
-
-Diastolic BP
-Mean
-St. Dev	76.93
-12.15	79.77
-11.97	85.14
-11.96	91.33
-13.54	83.30
-12.99
-	0.000**
-
-Race    n %5
-     White	427
-81.8%	5,828
-86.3%	3,969
-84.30%	1,816
-75.45%	12,040
-83.67%	Pearson chi2 = 199.0279    P = 0.000
-     Black	87
-16.67%
-	830
-12.29%	698
-14.83%	576
-23.93%	2,191
-15.23%	
-     Other	8
-1.53%	95
-1.41%	41
-0.87%	15
-9.43%	159
-1.10%	
-Sex  n (%)
-     Males	137
-37.35%	2,280
-35.39%	2,256
-51.06%	672
-30.26%	5,345
-39.35%	Pearson chi2= 403.4708      P= 0.000
-     Females	364
-72.65%	4,162
-64.61%	2,162
-48.94%	1,549
-69.74%	8,237
-60.65%	
-Region  n (%)
-     Northeast	98
-19.56%	1,424
-22.16%	1,047
-33.53%	497
-24.75%	3,066
-22.57%	Pearson chi2=  39.2905   P= 0.000
-     Midwest	111
-22.16%	1,514
-23.50%	1,106
-25.03%	573
-25.80%	3,304
-24.33%	
-     South	168
-33.53%	1,674
-25.99%	1,096
-24.81%	615
-27.69%	3,553
-26.16%	
-     West	124
-24.75%	1,830
-28.41%	1,169
-26.46%	536
-24.13%	3,659
-26.94%	
-Education n (%)
-Less than high            school	
-227
-45.31%	
-2,371
-36.81%	
-2,032
-45.99%	
-1,212
-54.57%	
-5,842
-43.01%	Pearson chi2= 280.75
-   P= 0.000
-   High School	164
-32.73%	2,266
-35.18%	1,376
-31.15%	675
-30.39%	4,481
-32.99%	
-   Some College	52
-10.38%	852
-13.23%	481
-10.89%	184
-8.28%	1,569
-11.55%	
-   College or more	58
-11.58%	953
-14.79%	529
-11.97%	150
-6.75%	1,690
-12.44%	
-Income n (%)
-   Under $7,000	
-229
-45.71%	
-2,030
-31.51	
-1,606
-36.35%	
-1,050
-47.28%	
-4,915
-36.19%	Pearson chi2= 238.18
-   P= 0.000
-   $7,000-9,999	80
-15.97%	1,242
-19.28%	879
-19.90%	424
-19.09%	2,625
-19.33%	
-   $10,000-14,999	84
-16.77%	1,437
-22.31%	903
-20.44%	391
-17.60%	2,815
-20.73%	
-   $15,000-19,999	50
-9.98%	784
-12.17%	450
-10.19%	168
-7.56%	1,452
-10.69%	
-   $20,000-and over	58
-11.58%	949
-14.73%	580
-13.13%	188
-8.46%	1,775
-13.07%	
-
-Add appropriate footnotes as necessary- such as
-* p-values calculated using chi-square tests (for categorical variable)
-**p-values calculated using multiple linear regression
-1) BMI is missing for 7 individuals in the cohort. And is categorized based on the CDC levels.
-2) From the 14,407 in NHANES I, we excluded 809 individuals with HD at baseline and 10 individuals with unknown HD status at baselines
-
 
 tab BMI_CAT, summarize(BMI)
 
