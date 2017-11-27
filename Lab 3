@@ -1,11 +1,7 @@
-DRAFT!!!!
-
-
-
 generate INC_HD = 0
 
-replace INC_HD = 1 if HEARTDISEASE86 == 1 | HEARTDISEASE87 == 1 | HEARTDISEASE92 == 1 | DEATHCODE == 3
-(2,817 real changes made)
+replace INC_HD = 1 if HEARTDISEASE86 == 1 | HEARTDISEASE87 == 1 | HEARTDISEASE92 == 1 | DEATHCODE == 3 | HDISEASE82 == 1
+
 
 replace INC_HD = . if PREV_HD ==1
 (809 real changes made, 809 to missing)
@@ -30,10 +26,10 @@ keep if PREV_HD == 0
 generate low_bmi = 0 if BMI_CAT == 2
 (7,146 missing values generated)
 
-. replace low_bmi = 1 if BMI_CAT == 1
+replace low_bmi = 1 if BMI_CAT == 1
 (501 real changes made)
 
-. tab low_bmi
+tab low_bmi
 
     low_bmi |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -45,10 +41,10 @@ generate low_bmi = 0 if BMI_CAT == 2
 generate overweight = 0 if BMI_CAT == 2
 (7,146 missing values generated)
 
-. replace overweight = 1 if BMI_CAT == 3
+replace overweight = 1 if BMI_CAT == 3
 (4,418 real changes made)
 
-. tab overweight
+tab overweight
 
  overweight |      Freq.     Percent        Cum.
 ------------+-----------------------------------
@@ -57,18 +53,151 @@ generate overweight = 0 if BMI_CAT == 2
 ------------+-----------------------------------
       Total |     10,860      100.00
 
-. generate obese = 0 if BMI_CAT == 2
+generate obese = 0 if BMI_CAT == 2
 (7,146 missing values generated)
 
-. replace obese = 1 if BMI_CAT == 4
+replace obese = 1 if BMI_CAT == 4
 (2,221 real changes made)
 
-. tab obese
 
-      obese |      Freq.     Percent        Cum.
+tab INC_HD
+
+     INC_HD |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      6,442       74.36       74.36
-          1 |      2,221       25.64      100.00
+          0 |     10,175       74.88       74.88
+          1 |      3,413       25.12      100.00
 ------------+-----------------------------------
-      Total |      8,663      100.00
+      Total |     13,588      100.00
+
+tab INC_HD obese
+
+           |         obese
+    INC_HD |         0          1 |     Total
+-----------+----------------------+----------
+         0 |     5,156      1,495 |     6,651 
+         1 |     1,286        726 |     2,012 
+-----------+----------------------+----------
+     Total |     6,442      2,221 |     8,663 
+
+
+csi case#exposed case#nonexposed noncase#exposed noncase#nonexposed
+
+csi 726 1495 1286 5156
+
+                 |   Exposed   Unexposed  |      Total
+-----------------+------------------------+------------
+           Cases |       726        1495  |       2221
+        Noncases |      1286        5156  |       6442
+-----------------+------------------------+------------
+           Total |      2012        6651  |       8663
+                 |                        |
+            Risk |   .360835    .2247782  |   .2563777
+                 |                        |
+                 |      Point estimate    |    [95% Conf. Interval]
+                 |------------------------+------------------------
+ Risk difference |         .1360568       |    .1127977    .1593159 
+      Risk ratio |         1.605293       |    1.491824    1.727394 
+ Attr. frac. ex. |         .3770609       |    .3296794    .4210932 
+ Attr. frac. pop |         .1232536       |
+                 +-------------------------------------------------
+                               chi2(1) =   149.99  Pr>chi2 = 0.0000
+
+
+tab INC_HD overweight
+
+           |      overweight
+    INC_HD |         0          1 |     Total
+-----------+----------------------+----------
+         0 |     5,156      3,135 |     8,291 
+         1 |     1,286      1,283 |     2,569 
+-----------+----------------------+----------
+     Total |     6,442      4,418 |    10,860 
+
+
+csi 1283 3135 1286 5156
+
+                 |   Exposed   Unexposed  |      Total
+-----------------+------------------------+------------
+           Cases |      1283        3135  |       4418
+        Noncases |      1286        5156  |       6442
+-----------------+------------------------+------------
+           Total |      2569        8291  |      10860
+                 |                        |
+            Risk |  .4994161    .3781209  |    .406814
+                 |                        |
+                 |      Point estimate    |    [95% Conf. Interval]
+                 |------------------------+------------------------
+ Risk difference |         .1212953       |    .0993231    .1432675 
+      Risk ratio |         1.320784       |    1.259453    1.385102 
+ Attr. frac. ex. |         .2428741       |    .2060046    .2780316 
+ Attr. frac. pop |         .0705314       |
+                 +-------------------------------------------------
+                               chi2(1) =   119.58  Pr>chi2 = 0.0000
+
+tab INC_HD low_bmi
+
+           |        low_bmi
+    INC_HD |         0          1 |     Total
+-----------+----------------------+----------
+         0 |     5,156        384 |     5,540 
+         1 |     1,286        117 |     1,403 
+-----------+----------------------+----------
+     Total |     6,442        501 |     6,943 
+
+
+csi 117 384 1286 5156
+
+                 |   Exposed   Unexposed  |      Total
+-----------------+------------------------+------------
+           Cases |       117         384  |        501
+        Noncases |      1286        5156  |       6442
+-----------------+------------------------+------------
+           Total |      1403        5540  |       6943
+                 |                        |
+            Risk |  .0833927    .0693141  |    .072159
+                 |                        |
+                 |      Point estimate    |    [95% Conf. Interval]
+                 |------------------------+------------------------
+ Risk difference |         .0140787       |   -.0018594    .0300167 
+      Risk ratio |         1.203114       |    .9864973    1.467295 
+ Attr. frac. ex. |         .1688235       |   -.0136875     .318474 
+ Attr. frac. pop |         .0394258       |
+                 +-------------------------------------------------
+                               chi2(1) =     3.31  Pr>chi2 = 0.0687
+
+
+
+tab sex INC_HD
+
+           |        INC_HD
+       sex |         0          1 |     Total
+-----------+----------------------+----------
+         0 |     3,725      1,623 |     5,348 
+         1 |     6,450      1,790 |     8,240 
+-----------+----------------------+----------
+     Total |    10,175      3,413 |    13,588 
+
+
+csi 1790 1623 6450 3725
+
+                 |   Exposed   Unexposed  |      Total
+-----------------+------------------------+------------
+           Cases |      1790        1623  |       3413
+        Noncases |      6450        3725  |      10175
+-----------------+------------------------+------------
+           Total |      8240        5348  |      13588
+                 |                        |
+            Risk |   .217233    .3034779  |   .2511775
+                 |                        |
+                 |      Point estimate    |    [95% Conf. Interval]
+                 |------------------------+------------------------
+ Risk difference |        -.0862449       |   -.1014471   -.0710427 
+      Risk ratio |         .7158115       |    .6756831    .7583232 
+ Prev. frac. ex. |         .2841885       |    .2416768    .3243169 
+ Prev. frac. pop |         .1723368       |
+                 +-------------------------------------------------
+                               chi2(1) =   128.25  Pr>chi2 = 0.0000
+
+. 
+
 
