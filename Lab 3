@@ -1,203 +1,1265 @@
-generate INC_HD = 0
+Lab 2: Prevalent Cases of Heart Disease (HD) and the population at risk for HD
 
-replace INC_HD = 1 if HEARTDISEASE86 == 1 | HEARTDISEASE87 == 1 | HEARTDISEASE92 == 1 | DEATHCODE == 3 | HDISEASE82 == 1
+Due date:  November 27 Monday
+
+Goals: 
+1)	To become more proficient with STATA: Creating LOG FILE of Stata session, introduction to DO FILEs (start with template) and saving datasets.
+2)	Determine number of Prevalent HD Cases
+3)	Determine how gender is associated with HD at baseline.
+4)	Determine the association between categories of BMI and prevalent and HD (using CSI) with “normal” BMI as the reference category
+5)	Determine distributions of other factors by BMI category in population at risk for HD.  Use simple summary statistics to complete descriptive tables for the dataset
+
+Data base: PREV_HD_LAB2.dta
+The data are from a cross-sectional study of 14,407 subjects (NHANES 1 study). 
+Data Dictionary:
+AGEEXAM: Age at examination
+AGE_CAT
+	0 = 20’s
+	1 = 30’s
+	2= 40’s
+	3 = 50’s
+	4 = 60’s
+	5 = 70’s
+
+RACE: Race of examined person
+	1 = White
+	2 = Black
+	3 = Other
+
+SEX: Sex of examined person
+	1 = Male
+	2 = Female
+
+ALC_STAT71: REPORTED ALCOHOL CONSUMPTION IN 1971
+	1 = Never
+	2= Current drinker, unknown amount
+	3 = Current drinker<=0.5 drink/day
+	4 = Current drinker>0.5 drink/day
+
+BMI (KG/M2) CONTINUOUS VALUES FOR BMI
+BMI_CAT (KG/M2): BMI CATEGORIES
+	1=Underweight BMI <18.5
+	2=Normal weight BMI 18.5-24.9
+	3=Overweight BMI 25-29.9
+	4=Obese BMI 30+
+
+EDUC_CAT: HIGHEST GRADE ATTAINED IN 1971
+	1 = < HS
+	2 = HS
+	3 = SOME COLLEGE
+	4 = college+	
+
+INCOME:  FAMILY INCOME IN 1971
+	1 = Under $7000
+	2 = $7,000-9,999
+	3 = $10,000-14,999
+	4 = $15,000-19,999
+	5 = $20,000-and over
+
+PHYS_ACT71 Total Physical Activity 1971 created from a combination of non-recreational and recreational activity variables  (SEE TABLE BELOW)
+	1 = None
+	2 = Mild
+	3 = Moderate
+	4 = High
+	5 = Intense
+
+REGION OF RESIDENCE IN US
+	1 = Northeast
+	2 = Midwest
+	3 = South
+	4 = West
+
+PREVHD: Prevalent Heart Disease at baseline (Did a Doctor ever tell you that you had heart attack or other heart disease?)
+	0= NO
+	1= YES
+	9 = Unknown
+
+PHYS_ACT71 Total Physical Activity 1971 created from a combination of non-recreational and recreational activity variables  (SEE TABLE BELOW)
+	1 = None
+	2 = Mild
+	3 = Moderate
+	4 = High
+	5 = Intense
 
 
-replace INC_HD = . if PREV_HD ==1
-(809 real changes made, 809 to missing)
+NEW Physical Activity	Non-recreational activity	Recreational activity
+Intense (5)	1 = Much	1 = Much
+High (4)	1 = Much	2 = Moderate
+	2 = Moderate	1 = Much
+Moderate (3)	2 = Moderate	2 = Moderate
+	1 = Much	3 = Little/None
+	3 = Little/None	1 = Much
+Mild (2)	2 = Moderate	3 = Little/None
+	3 = Little/None	2 = Moderate
+Little/None (1)	3 = Little/None	3 = Little/None
+
+Lab assignment:
+Copy and paste from the results window to this Word document where indicated. The output will be more readable in Word if you use a fixed space font like Courier or SAS Monospace. Change to SINGLE SPACE. 
+1)	Read in the database and summarize the data. Make a note of missing data.
+summarize : Statistics – Summaries, tables, and tests – summary and descriptive statistics – summary statistics
+•	* Note those variables not =14407 are missing some participants.   
+•	** In some of the variables a missing value seems to be coded as a “9”
+
+VTINNEY OUTPUT:
+summarize
+
+    Variable |        Obs        Mean    Std. Dev.       Min        Max
+-------------+---------------------------------------------------------
+        RACE |     14,407    1.174429    .4075386          1          3
+         SEX |     14,407    1.596724    .4905723          1          2
+     AGEEXAM |     14,407    48.94489    15.58996         25         75
+      REGION |     14,407    2.575623    1.107863          1          4
+  HDISEASE71 |     14,407    .0624002    .3293777          0          9
+-------------+---------------------------------------------------------
+  ALC_STAT71 |     14,382    2.549924    1.157137          1          4
+  PHYS_ACT71 |     14,394    3.052661    1.131771          1          5
+         BMI |     14,400    25.63937    5.150991   12.41836   72.31405
+     BMI_CAT |     14,400    2.625208    .8009929          1          4
+  SERUM_CHOL |     14,326    220.7761    48.51591         53        793
+-------------+---------------------------------------------------------
+  SMOKSTAT71 |      6,905    2.069225    1.043306          1          4
+ SYSTOLIC_BP |     14,339    134.1696    24.41194         80        270
+DIASTOLIC_BP |     14,336    83.50753    13.07599         25        180
+     AGE_CAT |     14,407    2.431596    1.607725          0          5
+     PREV_HD |     14,397    .0561923    .2303006          0          1
+-------------+---------------------------------------------------------
+    EDUC_CAT |     14,407    1.911154    1.015508          1          4
+      INCOME |     14,407    2.423405    1.404047          1          5
+
+. 
+. summarize, detail
+
+                   RACE OF EXAMINED PERSON
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs              14,407
+25%            1              1       Sum of Wgt.      14,407
+
+50%            1                      Mean           1.174429
+                        Largest       Std. Dev.      .4075386
+75%            1              3
+90%            2              3       Variance       .1660877
+95%            2              3       Skewness       2.193174
+99%            3              3       Kurtosis       7.038424
+
+                   SEX OF EXAMINED PERSON
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs              14,407
+25%            1              1       Sum of Wgt.      14,407
+
+50%            2                      Mean           1.596724
+                        Largest       Std. Dev.      .4905723
+75%            2              2
+90%            2              2       Variance       .2406612
+95%            2              2       Skewness      -.3943442
+99%            2              2       Kurtosis       1.155507
+
+                     AGE AT EXAMINATION
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%           25             25
+ 5%           26             25
+10%           28             25       Obs              14,407
+25%           35             25       Sum of Wgt.      14,407
+
+50%           48                      Mean           48.94489
+                        Largest       Std. Dev.      15.58996
+75%           65             75
+90%           70             75       Variance       243.0469
+95%           72             75       Skewness       .0643969
+99%           74             75       Kurtosis       1.615101
+
+                           REGION
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs              14,407
+25%            2              1       Sum of Wgt.      14,407
+
+50%            3                      Mean           2.575623
+                        Largest       Std. Dev.      1.107863
+75%            4              4
+90%            4              4       Variance       1.227361
+95%            4              4       Skewness      -.0973157
+99%            4              4       Kurtosis       1.671661
+
+                         HDISEASE71
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              14,407
+25%            0              0       Sum of Wgt.      14,407
+
+50%            0                      Mean           .0624002
+                        Largest       Std. Dev.      .3293777
+75%            0              9
+90%            0              9       Variance       .1084897
+95%            1              9       Skewness       15.15816
+99%            1              9       Kurtosis       380.0401
+
+                         ALC_STAT71
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs              14,382
+25%            1              1       Sum of Wgt.      14,382
+
+50%            3                      Mean           2.549924
+                        Largest       Std. Dev.      1.157137
+75%            4              4
+90%            4              4       Variance       1.338965
+95%            4              4       Skewness      -.1780119
+99%            4              4       Kurtosis       1.576475
+
+                         PHYS_ACT71
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            2              1       Obs              14,394
+25%            2              1       Sum of Wgt.      14,394
+
+50%            3                      Mean           3.052661
+                        Largest       Std. Dev.      1.131771
+75%            4              5
+90%            5              5       Variance       1.280906
+95%            5              5       Skewness       .0844162
+99%            5              5       Kurtosis       2.365202
+
+                             BMI
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%     17.10563       12.41836
+ 5%     18.87443       12.57178
+10%     19.96241       12.92887       Obs              14,400
+25%      22.0563       12.97575       Sum of Wgt.      14,400
+
+50%     24.93079                      Mean           25.63937
+                        Largest       Std. Dev.      5.150991
+75%     28.25538       61.09805
+90%     32.06086       62.08575       Variance       26.53271
+95%     34.87388       63.25636       Skewness       1.270211
+99%     42.31295       72.31405       Kurtosis       6.639383
+
+                           BMI_CAT
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            2              1
+10%            2              1       Obs              14,400
+25%            2              1       Sum of Wgt.      14,400
+
+50%            2                      Mean           2.625208
+                        Largest       Std. Dev.      .8009929
+75%            3              4
+90%            4              4       Variance       .6415897
+95%            4              4       Skewness       .3519645
+99%            4              4       Kurtosis       2.258088
+
+                         SERUM_CHOL
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%          127             53
+ 5%          151             75
+10%          164             78       Obs              14,326
+25%          187             79       Sum of Wgt.      14,326
+
+50%          217                      Mean           220.7761
+                        Largest       Std. Dev.      48.51591
+75%          249            537
+90%          283            591       Variance       2353.794
+95%          306            691       Skewness       .8267634
+99%          354            793       Kurtosis       6.246278
+
+                         SMOKSTAT71
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs               6,905
+25%            1              1       Sum of Wgt.       6,905
+
+50%            2                      Mean           2.069225
+                        Largest       Std. Dev.      1.043306
+75%            3              4
+90%            4              4       Variance       1.088486
+95%            4              4       Skewness       .4072877
+99%            4              4       Kurtosis       1.834475
+
+                         SYSTOLIC_BP
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%           94             80
+ 5%          100             80
+10%          108             80       Obs              14,339
+25%          118             80       Sum of Wgt.      14,339
+
+50%          130                      Mean           134.1696
+                        Largest       Std. Dev.      24.41194
+75%          148            260
+90%          168            270       Variance       595.9429
+95%          180            270       Skewness       1.004466
+99%          210            270       Kurtosis       4.468155
+
+                        DIASTOLIC_BP
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%           58             25
+ 5%           64             34
+10%           70             38       Obs              14,336
+25%           75             38       Sum of Wgt.      14,336
+
+50%           82                      Mean           83.50753
+                        Largest       Std. Dev.      13.07599
+75%           90            170
+90%          100            175       Variance       170.9815
+95%          108            180       Skewness       .6419864
+99%          120            180       Kurtosis        4.73612
+
+                           AGE_CAT
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              14,407
+25%            1              0       Sum of Wgt.      14,407
+
+50%            2                      Mean           2.431596
+                        Largest       Std. Dev.      1.607725
+75%            4              5
+90%            5              5       Variance        2.58478
+95%            5              5       Skewness       .0484869
+99%            5              5       Kurtosis       1.776206
+
+                           PREV_HD
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%            0              0
+10%            0              0       Obs              14,397
+25%            0              0       Sum of Wgt.      14,397
+
+50%            0                      Mean           .0561923
+                        Largest       Std. Dev.      .2303006
+75%            0              1
+90%            0              1       Variance       .0530384
+95%            1              1       Skewness       3.854294
+99%            1              1       Kurtosis       15.85558
+
+                          EDUC_CAT
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs              14,407
+25%            1              1       Sum of Wgt.      14,407
+
+50%            2                      Mean           1.911154
+                        Largest       Std. Dev.      1.015508
+75%            2              4
+90%            4              4       Variance       1.031256
+95%            4              4       Skewness       .8695299
+99%            4              4       Kurtosis       2.596898
+
+                           INCOME
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            1              1
+ 5%            1              1
+10%            1              1       Obs              14,407
+25%            1              1       Sum of Wgt.      14,407
+
+50%            2                      Mean           2.423405
+                        Largest       Std. Dev.      1.404047
+75%            3              5
+90%            5              5       Variance       1.971347
+95%            5              5       Skewness       .5625259
+99%            5              5       Kurtosis        2.02657
+
+2)	Identify those with Prevalent Heart Disease (HD) in the data set.  Consider what to do with the 10 missing prevalent HD.  Create a dichotomous variable for HD.  Write out your assumption in making the decision.  (Either recode as one of the existing categories or drop).
+VTINNEY Output:
+I decided to drop the ten missing observations rather than making the assumption that they were either positive or negative for heart disease diagnosis. 
+
+drop if PREV_HD == .
+(10 observations deleted)
+
+tab PREV_HD
+
+    PREV_HD |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |     13,588       94.38       94.38
+          1 |        809        5.62      100.00
+------------+-----------------------------------
+      Total |     14,397      100.00
+
+label define prevhd 0 "No" 1 "Yes"
+
+label values PREV_HD prevhd
+
+tab PREV_HD
+
+    PREV_HD |      Freq.     Percent        Cum.
+------------+-----------------------------------
+         No |     13,588       94.38       94.38
+        Yes |        809        5.62      100.00
+------------+-----------------------------------
+      Total |     14,397      100.00
+
+3)	Determine how gender is related to prevalence of HD.
+Statistics – Epidemiology and related – Tables for Epidemiologists – Cohort study risk ratios etc calculator
+VTINNEY Output: 
+I had to recode sex so that it was a dichotomous variable in order to get the odds ratio for gender and heart disease. I then did a chi square and found that the relationship between gender and heart disease is significantly higher for men than women.
+
+tab SEX PREV_HD, chi2
+
+    SEX OF |
+  EXAMINED |        PREV_HD
+    PERSON |        No        Yes |     Total
+-----------+----------------------+----------
+      Male |     5,348        456 |     5,804 
+    Female |     8,240        353 |     8,593 
+-----------+----------------------+----------
+     Total |    13,588        809 |    14,397 
+
+          Pearson chi2(1) =  91.7891   Pr = 0.000
 
 generate sex = 0
 
 replace sex = 1 if SEX == 2
-(8,597 real changes made)
+(8,593 real changes made)
 
 tab sex
 
         sex |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      5,810       40.33       40.33
-          1 |      8,597       59.67      100.00
+          0 |      5,804       40.31       40.31
+          1 |      8,593       59.69      100.00
 ------------+-----------------------------------
-      Total |     14,407      100.00
+      Total |     14,397      100.00
 
-keep if PREV_HD == 0
-(819 observations deleted)
+label define sex2 0 "Male" 1 "Female"
 
-generate low_bmi = 0 if BMI_CAT == 2
-(7,146 missing values generated)
+label values sex sex2
 
-replace low_bmi = 1 if BMI_CAT == 1
-(501 real changes made)
+tab sex
 
-tab low_bmi
-
-    low_bmi |      Freq.     Percent        Cum.
+        sex |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          0 |      6,442       92.78       92.78
-          1 |        501        7.22      100.00
+       Male |      5,804       40.31       40.31
+     Female |      8,593       59.69      100.00
 ------------+-----------------------------------
-      Total |      6,943      100.00
-
-generate overweight = 0 if BMI_CAT == 2
-(7,146 missing values generated)
-
-replace overweight = 1 if BMI_CAT == 3
-(4,418 real changes made)
-
-tab overweight
-
- overweight |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |      6,442       59.32       59.32
-          1 |      4,418       40.68      100.00
-------------+-----------------------------------
-      Total |     10,860      100.00
-
-generate obese = 0 if BMI_CAT == 2
-(7,146 missing values generated)
-
-replace obese = 1 if BMI_CAT == 4
-(2,221 real changes made)
+      Total |     14,397      100.00
 
 
-tab INC_HD
+tabodds PREV_HD sex, or
 
-     INC_HD |      Freq.     Percent        Cum.
-------------+-----------------------------------
-          0 |     10,175       74.88       74.88
-          1 |      3,413       25.12      100.00
-------------+-----------------------------------
-      Total |     13,588      100.00
+---------------------------------------------------------------------------
+         sex |  Odds Ratio       chi2       P>chi2     [95% Conf. Interval]
+-------------+-------------------------------------------------------------
+        Male |    1.000000          .           .              .          .
+      Female |    0.502428      91.78       0.0000      0.435216   0.580020
+---------------------------------------------------------------------------
+Test of homogeneity (equal odds): chi2(1)  =    91.78
+                                  Pr>chi2  =   0.0000
 
-tab INC_HD obese
-
-           |         obese
-    INC_HD |         0          1 |     Total
------------+----------------------+----------
-         0 |     5,156      1,495 |     6,651 
-         1 |     1,286        726 |     2,012 
------------+----------------------+----------
-     Total |     6,442      2,221 |     8,663 
+Score test for trend of odds:     chi2(1)  =    91.78
+                                  Pr>chi2  =   0.0000
 
 
-csi case#exposed case#nonexposed noncase#exposed noncase#nonexposed
-
-csi 726 1495 1286 5156
+csi 456 353 5348 8240
 
                  |   Exposed   Unexposed  |      Total
 -----------------+------------------------+------------
-           Cases |       726        1495  |       2221
-        Noncases |      1286        5156  |       6442
+           Cases |       456         353  |        809
+        Noncases |      5348        8240  |      13588
 -----------------+------------------------+------------
-           Total |      2012        6651  |       8663
+           Total |      5804        8593  |      14397
                  |                        |
-            Risk |   .360835    .2247782  |   .2563777
+            Risk |  .0785665    .0410799  |   .0561923
                  |                        |
                  |      Point estimate    |    [95% Conf. Interval]
                  |------------------------+------------------------
- Risk difference |         .1360568       |    .1127977    .1593159 
-      Risk ratio |         1.605293       |    1.491824    1.727394 
- Attr. frac. ex. |         .3770609       |    .3296794    .4210932 
- Attr. frac. pop |         .1232536       |
+ Risk difference |         .0374866       |    .0293918    .0455813 
+      Risk ratio |         1.912527       |    1.671174    2.188736 
+ Attr. frac. ex. |         .4771315       |    .4016184    .5431152 
+ Attr. frac. pop |         .2689394       |
                  +-------------------------------------------------
-                               chi2(1) =   149.99  Pr>chi2 = 0.0000
+                               chi2(1) =    91.79  Pr>chi2 = 0.0000
 
+4)	Determine the association between categories of BMI and prevalent and HD (using CSI) with “normal” BMI as the reference category.  Interpret your findings.
 
-tab INC_HD overweight
+VTINNEY Output: 
+The odds is 99% higher (OR 1.99, CI: 1.258-3.17) for those in the highest BMI category (obese over 30 BMI), as compared to those in the underweight category (p= 0.000, as determined by chi-square test). 
 
-           |      overweight
-    INC_HD |         0          1 |     Total
+tab BMI_CAT PREV_HD, row column
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+|  row percentage   |
+| column percentage |
++-------------------+
+
+           |        PREV_HD
+   BMI_CAT |        No        Yes |     Total
 -----------+----------------------+----------
-         0 |     5,156      3,135 |     8,291 
-         1 |     1,286      1,283 |     2,569 
+         1 |       501         21 |       522 
+           |     95.98       4.02 |    100.00 
+           |      3.69       2.60 |      3.63 
 -----------+----------------------+----------
-     Total |     6,442      4,418 |    10,860 
+         2 |     6,442        311 |     6,753 
+           |     95.39       4.61 |    100.00 
+           |     47.43      38.49 |     46.93 
+-----------+----------------------+----------
+         3 |     4,418        290 |     4,708 
+           |     93.84       6.16 |    100.00 
+           |     32.53      35.89 |     32.72 
+-----------+----------------------+----------
+         4 |     2,221        186 |     2,407 
+           |     92.27       7.73 |    100.00 
+           |     16.35      23.02 |     16.73 
+-----------+----------------------+----------
+     Total |    13,582        808 |    14,390 
+           |     94.38       5.62 |    100.00 
+           |    100.00     100.00 |    100.00 
 
 
-csi 1283 3135 1286 5156
+tabodds PREV_HD BMI_CAT, or
+
+---------------------------------------------------------------------------
+     BMI_CAT |  Odds Ratio       chi2       P>chi2     [95% Conf. Interval]
+-------------+-------------------------------------------------------------
+           1 |    1.000000          .           .              .          .
+           2 |    1.151750       0.38       0.5391      0.733508   1.808471
+           3 |    1.565996       3.84       0.0502      0.995872   2.462508
+           4 |    1.997942       8.96       0.0028      1.258395   3.172114
+---------------------------------------------------------------------------
+Test of homogeneity (equal odds): chi2(3)  =    38.39
+                                  Pr>chi2  =   0.0000
+
+Score test for trend of odds:     chi2(1)  =    37.62
+                                  Pr>chi2  =   0.0000
+
+** obese compared to normal
+
+csi 186 311 2221 6442
 
                  |   Exposed   Unexposed  |      Total
 -----------------+------------------------+------------
-           Cases |      1283        3135  |       4418
-        Noncases |      1286        5156  |       6442
+           Cases |       186         311  |        497
+        Noncases |      2221        6442  |       8663
 -----------------+------------------------+------------
-           Total |      2569        8291  |      10860
+           Total |      2407        6753  |       9160
                  |                        |
-            Risk |  .4994161    .3781209  |    .406814
+            Risk |  .0772746    .0460536  |   .0542576
                  |                        |
                  |      Point estimate    |    [95% Conf. Interval]
                  |------------------------+------------------------
- Risk difference |         .1212953       |    .0993231    .1432675 
-      Risk ratio |         1.320784       |    1.259453    1.385102 
- Attr. frac. ex. |         .2428741       |    .2060046    .2780316 
- Attr. frac. pop |         .0705314       |
+ Risk difference |          .031221       |    .0194402    .0430018 
+      Risk ratio |         1.677928       |    1.407684    2.000052 
+ Attr. frac. ex. |         .4040267       |    .2896133     .500013 
+ Attr. frac. pop |         .1512052       |
                  +-------------------------------------------------
-                               chi2(1) =   119.58  Pr>chi2 = 0.0000
+                               chi2(1) =    33.71  Pr>chi2 = 0.0000
 
-tab INC_HD low_bmi
+** overweight compared to normal
 
-           |        low_bmi
-    INC_HD |         0          1 |     Total
------------+----------------------+----------
-         0 |     5,156        384 |     5,540 
-         1 |     1,286        117 |     1,403 
------------+----------------------+----------
-     Total |     6,442        501 |     6,943 
-
-
-csi 117 384 1286 5156
+csi 290 311 4418 6442
 
                  |   Exposed   Unexposed  |      Total
 -----------------+------------------------+------------
-           Cases |       117         384  |        501
-        Noncases |      1286        5156  |       6442
+           Cases |       290         311  |        601
+        Noncases |      4418        6442  |      10860
 -----------------+------------------------+------------
-           Total |      1403        5540  |       6943
+           Total |      4708        6753  |      11461
                  |                        |
-            Risk |  .0833927    .0693141  |    .072159
+            Risk |  .0615973    .0460536  |   .0524387
                  |                        |
                  |      Point estimate    |    [95% Conf. Interval]
                  |------------------------+------------------------
- Risk difference |         .0140787       |   -.0018594    .0300167 
-      Risk ratio |         1.203114       |    .9864973    1.467295 
- Attr. frac. ex. |         .1688235       |   -.0136875     .318474 
- Attr. frac. pop |         .0394258       |
+ Risk difference |         .0155437       |    .0070493    .0240381 
+      Risk ratio |         1.337513       |    1.144771    1.562706 
+ Attr. frac. ex. |         .2523435       |    .1264628    .3600843 
+ Attr. frac. pop |         .1217631       |
                  +-------------------------------------------------
-                               chi2(1) =     3.31  Pr>chi2 = 0.0687
+                               chi2(1) =    13.49  Pr>chi2 = 0.0002
+
+5)	Define your “AT RISK” population (Those who could develop incident HD.) Determine distributions of other factors by BMI category in population at risk for HD.  Use simple summary statistics to complete descriptive tables for the dataset.  (chi square).
+VTINNEY Output:
+Those considered to be at risk are those that are in the overweight and obese BMI categories, as well as those that live in the Southern part of the United States and males. 
+
+	keep if HDISEASE71 == 0
+(809 observations deleted)
+
+tabodds PREV_HD REGION, or
+
+---------------------------------------------------------------------------
+      REGION |  Odds Ratio       chi2       P>chi2     [95% Conf. Interval]
+-------------+-------------------------------------------------------------
+   Northeast |    1.000000          .           .              .          .
+     Midwest |    1.060751       0.28       0.5935      0.854201   1.317246
+       South |    1.465051      14.14       0.0002      1.199184   1.789863
+        West |    0.968191       0.09       0.7690      0.780272   1.201368
+---------------------------------------------------------------------------
+Test of homogeneity (equal odds): chi2(3)  =    24.60
+                                  Pr>chi2  =   0.0000
+
+Score test for trend of odds:     chi2(1)  =     0.47
+                                  Pr>chi2  =   0.4916
 
 
-
-tab sex INC_HD
-
-           |        INC_HD
-       sex |         0          1 |     Total
------------+----------------------+----------
-         0 |     3,725      1,623 |     5,348 
-         1 |     6,450      1,790 |     8,240 
------------+----------------------+----------
-     Total |    10,175      3,413 |    13,588 
-
-
-csi 1790 1623 6450 3725
+csi 409 3717 84 662
 
                  |   Exposed   Unexposed  |      Total
 -----------------+------------------------+------------
-           Cases |      1790        1623  |       3413
-        Noncases |      6450        3725  |      10175
+           Cases |       409        3717  |       4126
+        Noncases |        84         662  |        746
 -----------------+------------------------+------------
-           Total |      8240        5348  |      13588
+           Total |       493        4379  |       4872
                  |                        |
-            Risk |   .217233    .3034779  |   .2511775
+            Risk |  .8296146    .8488239  |   .8468801
                  |                        |
                  |      Point estimate    |    [95% Conf. Interval]
                  |------------------------+------------------------
- Risk difference |        -.0862449       |   -.1014471   -.0710427 
-      Risk ratio |         .7158115       |    .6756831    .7583232 
- Prev. frac. ex. |         .2841885       |    .2416768    .3243169 
- Prev. frac. pop |         .1723368       |
+ Risk difference |        -.0192093       |   -.0540519    .0156332 
+      Risk ratio |         .9773695       |    .9372532    1.019203 
+ Prev. frac. ex. |         .0226305       |   -.0192028    .0627468 
+ Prev. frac. pop |           .00229       |
                  +-------------------------------------------------
-                               chi2(1) =   128.25  Pr>chi2 = 0.0000
+                               chi2(1) =     1.26  Pr>chi2 = 0.2615
 
-. 
+. csi 409 1669 84 539
 
+                 |   Exposed   Unexposed  |      Total
+-----------------+------------------------+------------
+           Cases |       409        1669  |       2078
+        Noncases |        84         539  |        623
+-----------------+------------------------+------------
+           Total |       493        2208  |       2701
+                 |                        |
+            Risk |  .8296146    .7558877  |   .7693447
+                 |                        |
+                 |      Point estimate    |    [95% Conf. Interval]
+                 |------------------------+------------------------
+ Risk difference |         .0737269       |    .0360114    .1114425 
+      Risk ratio |         1.097537       |    1.047671    1.149777 
+ Attr. frac. ex. |         .0888689       |    .0455016    .1302658 
+ Attr. frac. pop |         .0174915       |
+                 +-------------------------------------------------
+                               chi2(1) =    12.34  Pr>chi2 = 0.0004
+
+. csi 409 5560 84 787
+
+                 |   Exposed   Unexposed  |      Total
+-----------------+------------------------+------------
+           Cases |       409        5560  |       5969
+        Noncases |        84         787  |        871
+-----------------+------------------------+------------
+           Total |       493        6347  |       6840
+                 |                        |
+            Risk |  .8296146    .8760044  |   .8726608
+                 |                        |
+                 |      Point estimate    |    [95% Conf. Interval]
+                 |------------------------+------------------------
+ Risk difference |        -.0463898       |   -.0805537   -.0122259 
+      Risk ratio |         .9470439       |    .9089451    .9867396 
+ Prev. frac. ex. |         .0529561       |    .0132604    .0910549 
+ Prev. frac. pop |         .0038169       |
+                 +-------------------------------------------------
+                               chi2(1) =     8.86  Pr>chi2 = 0.0029
+
+. csi 5560 3717 787 662
+
+                 |   Exposed   Unexposed  |      Total
+-----------------+------------------------+------------
+           Cases |      5560        3717  |       9277
+        Noncases |       787         662  |       1449
+-----------------+------------------------+------------
+           Total |      6347        4379  |      10726
+                 |                        |
+            Risk |  .8760044    .8488239  |   .8649077
+                 |                        |
+                 |      Point estimate    |    [95% Conf. Interval]
+                 |------------------------+------------------------
+ Risk difference |         .0271805       |    .0138272    .0405338 
+      Risk ratio |         1.032021       |    1.016094    1.048198 
+ Attr. frac. ex. |         .0310278       |    .0158392     .045982 
+ Attr. frac. pop |         .0185959       |
+                 +-------------------------------------------------
+                               chi2(1) =    16.38  Pr>chi2 = 0.0001
+
+. csi 5560 1669 787 539
+
+                 |   Exposed   Unexposed  |      Total
+-----------------+------------------------+------------
+           Cases |      5560        1669  |       7229
+        Noncases |       787         539  |       1326
+-----------------+------------------------+------------
+           Total |      6347        2208  |       8555
+                 |                        |
+            Risk |  .8760044    .7558877  |   .8450029
+                 |                        |
+                 |      Point estimate    |    [95% Conf. Interval]
+                 |------------------------+------------------------
+ Risk difference |         .1201167       |    .1004502    .1397832 
+      Risk ratio |         1.158908       |     1.12979    1.188777 
+ Attr. frac. ex. |         .1371189       |    .1148797    .1587993 
+ Attr. frac. pop |         .1054615       |
+                 +-------------------------------------------------
+                               chi2(1) =   180.46  Pr>chi2 = 0.0000
+
+Comparing distributions of categories testing with chi square:
+Statistics – summary tables and tests – frequency tables – two way tables with measures of associations
+6)	  Complete the table using the methods above:
+TITLE: Distribution of Baseline variables in NHANES I by BMI Categories 
+	Low weigh
+
+n = 522	Normal
+
+n = 6,753	Overweight
+
+n = 4,708	Obese
+
+n = 2,407	Total2
+
+n = 14,390	p value
+for chi-square
+BMI 1   Mean
+st.dev	17.44
+0.993	22.16
+1.734
+	27.16
+1.38
+	34.20
+4.47	25.64
+5.15	0.000**
+-_____
+Age mean
+st.dev	46.52
+16.76	46.76
+15.78	51.33
+15.05	50.92
+14.87	48.94
+15.59	0.000**
+
+Systolic BP Mean
+St. Dev	124.25
+23.93	127.78
+22.35	136.31
+22.62	146.06
+25.65	133.41
+24.06	0.000**
+
+Diastolic BP
+Mean
+St. Dev	76.93
+12.15	79.77
+11.97	85.14
+11.96	91.33
+13.54	83.30
+12.99
+	0.000**
+
+Race    n %5
+     White	427
+81.8%	5,828
+86.3%	3,969
+84.30%	1,816
+75.45%	12,040
+83.67%	Pearson chi2 = 199.0279    P = 0.000
+     Black	87
+16.67%
+	830
+12.29%	698
+14.83%	576
+23.93%	2,191
+15.23%	
+     Other	8
+1.53%	95
+1.41%	41
+0.87%	15
+9.43%	159
+1.10%	
+Sex  n (%)
+     Males	137
+37.35%	2,280
+35.39%	2,256
+51.06%	672
+30.26%	5,345
+39.35%	Pearson chi2= 403.4708      P= 0.000
+     Females	364
+72.65%	4,162
+64.61%	2,162
+48.94%	1,549
+69.74%	8,237
+60.65%	
+Region  n (%)
+     Northeast	98
+19.56%	1,424
+22.16%	1,047
+33.53%	497
+24.75%	3,066
+22.57%	Pearson chi2=  39.2905   P= 0.000
+     Midwest	111
+22.16%	1,514
+23.50%	1,106
+25.03%	573
+25.80%	3,304
+24.33%	
+     South	168
+33.53%	1,674
+25.99%	1,096
+24.81%	615
+27.69%	3,553
+26.16%	
+     West	124
+24.75%	1,830
+28.41%	1,169
+26.46%	536
+24.13%	3,659
+26.94%	
+Education n (%)
+Less than high            school	
+227
+45.31%	
+2,371
+36.81%	
+2,032
+45.99%	
+1,212
+54.57%	
+5,842
+43.01%	Pearson chi2= 280.75
+   P= 0.000
+   High School	164
+32.73%	2,266
+35.18%	1,376
+31.15%	675
+30.39%	4,481
+32.99%	
+   Some College	52
+10.38%	852
+13.23%	481
+10.89%	184
+8.28%	1,569
+11.55%	
+   College or more	58
+11.58%	953
+14.79%	529
+11.97%	150
+6.75%	1,690
+12.44%	
+Income n (%)
+   Under $7,000	
+229
+45.71%	
+2,030
+31.51	
+1,606
+36.35%	
+1,050
+47.28%	
+4,915
+36.19%	Pearson chi2= 238.18
+   P= 0.000
+   $7,000-9,999	80
+15.97%	1,242
+19.28%	879
+19.90%	424
+19.09%	2,625
+19.33%	
+   $10,000-14,999	84
+16.77%	1,437
+22.31%	903
+20.44%	391
+17.60%	2,815
+20.73%	
+   $15,000-19,999	50
+9.98%	784
+12.17%	450
+10.19%	168
+7.56%	1,452
+10.69%	
+   $20,000-and over	58
+11.58%	949
+14.73%	580
+13.13%	188
+8.46%	1,775
+13.07%	
+
+Add appropriate footnotes as necessary- such as
+* p-values calculated using chi-square tests (for categorical variable)
+**p-values calculated using multiple linear regression
+1) BMI is missing for 7 individuals in the cohort. And is categorized based on the CDC levels.
+2) From the 14,407 in NHANES I, we excluded 809 individuals with HD at baseline and 10 individuals with unknown HD status at baselines
+
+
+tab BMI_CAT, summarize(BMI)
+
+            |           Summary of BMI
+    BMI_CAT |        Mean   Std. Dev.       Freq.
+------------+------------------------------------
+          1 |   17.443264    .9929225         522
+          2 |   22.163271   1.7338947       6,753
+          3 |   27.163704   1.3804144       4,708
+          4 |   34.196745   4.4692093       2,407
+------------+------------------------------------
+      Total |   25.640878   5.1504865      14,390
+
+
+tab BMI_CAT, summarize(AGEEXAM)
+
+            |    Summary of AGE AT EXAMINATION
+    BMI_CAT |        Mean   Std. Dev.       Freq.
+------------+------------------------------------
+          1 |   46.517241   16.760498         522
+          2 |   46.757737   15.776015       6,753
+          3 |   51.329439   15.049243       4,708
+          4 |   50.920233   14.869153       2,407
+------------+------------------------------------
+      Total |   48.941001   15.588042      14,390
+
+
+tab BMI_CAT RACE, row column
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+|  row percentage   |
+| column percentage |
++-------------------+
+
+           |     RACE OF EXAMINED PERSON
+   BMI_CAT |     White      Negro      Other |     Total
+-----------+---------------------------------+----------
+         1 |       427         87          8 |       522 
+           |     81.80      16.67       1.53 |    100.00 
+           |      3.55       3.97       5.03 |      3.63 
+-----------+---------------------------------+----------
+         2 |     5,828        830         95 |     6,753 
+           |     86.30      12.29       1.41 |    100.00 
+           |     48.41      37.88      59.75 |     46.93 
+-----------+---------------------------------+----------
+         3 |     3,969        698         41 |     4,708 
+           |     84.30      14.83       0.87 |    100.00 
+           |     32.97      31.86      25.79 |     32.72 
+-----------+---------------------------------+----------
+         4 |     1,816        576         15 |     2,407 
+           |     75.45      23.93       0.62 |    100.00 
+           |     15.08      26.29       9.43 |     16.73 
+-----------+---------------------------------+----------
+     Total |    12,040      2,191        159 |    14,390 
+           |     83.67      15.23       1.10 |    100.00 
+           |    100.00     100.00     100.00 |    100.00 
+
+tab BMI_CAT SEX, row column
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+|  row percentage   |
+| column percentage |
++-------------------+
+
+           |    SEX OF EXAMINED
+           |        PERSON
+   BMI_CAT |      Male     Female |     Total
+-----------+----------------------+----------
+         1 |       137        364 |       501 
+           |     27.35      72.65 |    100.00 
+           |      2.56       4.42 |      3.69 
+-----------+----------------------+----------
+         2 |     2,280      4,162 |     6,442 
+           |     35.39      64.61 |    100.00 
+           |     42.66      50.53 |     47.43 
+-----------+----------------------+----------
+         3 |     2,256      2,162 |     4,418 
+           |     51.06      48.94 |    100.00 
+           |     42.21      26.25 |     32.53 
+-----------+----------------------+----------
+         4 |       672      1,549 |     2,221 
+           |     30.26      69.74 |    100.00 
+           |     12.57      18.81 |     16.35 
+-----------+----------------------+----------
+     Total |     5,345      8,237 |    13,582 
+           |     39.35      60.65 |    100.00 
+           |    100.00     100.00 |    100.00
+
+
+tab BMI_CAT REGION, row column
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+|  row percentage   |
+| column percentage |
++-------------------+
+
+           |                   REGION
+   BMI_CAT | Northeast    Midwest      South       West |     Total
+-----------+--------------------------------------------+----------
+         1 |        98        111        168        124 |       501 
+           |     19.56      22.16      33.53      24.75 |    100.00 
+           |      3.20       3.36       4.73       3.39 |      3.69 
+-----------+--------------------------------------------+----------
+         2 |     1,424      1,514      1,674      1,830 |     6,442 
+           |     22.10      23.50      25.99      28.41 |    100.00 
+           |     46.44      45.82      47.12      50.01 |     47.43 
+-----------+--------------------------------------------+----------
+         3 |     1,047      1,106      1,096      1,169 |     4,418 
+           |     23.70      25.03      24.81      26.46 |    100.00 
+           |     34.15      33.47      30.85      31.95 |     32.53 
+-----------+--------------------------------------------+----------
+         4 |       497        573        615        536 |     2,221 
+           |     22.38      25.80      27.69      24.13 |    100.00 
+           |     16.21      17.34      17.31      14.65 |     16.35 
+-----------+--------------------------------------------+----------
+     Total |     3,066      3,304      3,553      3,659 |    13,582 
+           |     22.57      24.33      26.16      26.94 |    100.00 
+           |    100.00     100.00     100.00     100.00 |    100.00
+
+
+tab BMI_CAT RACE, chi2
+
+           |     RACE OF EXAMINED PERSON
+   BMI_CAT |     White      Negro      Other |     Total
+-----------+---------------------------------+----------
+         1 |       409         84          8 |       501 
+         2 |     5,560        787         95 |     6,442 
+         3 |     3,717        662         39 |     4,418 
+         4 |     1,669        539         13 |     2,221 
+-----------+---------------------------------+----------
+     Total |    11,355      2,072        155 |    13,582 
+
+          Pearson chi2(6) = 199.0279   Pr = 0.000
+
+tab BMI_CAT SEX, chi2
+	
+           |    SEX OF EXAMINED
+           |        PERSON
+   BMI_CAT |      Male     Female |     Total
+-----------+----------------------+----------
+         1 |       137        364 |       501 
+         2 |     2,280      4,162 |     6,442 
+         3 |     2,256      2,162 |     4,418 
+         4 |       672      1,549 |     2,221 
+-----------+----------------------+----------
+     Total |     5,345      8,237 |    13,582 
+
+          Pearson chi2(3) = 403.4708   Pr = 0.000
+
+
+tab BMI_CAT REGION, chi2
+
+           |                   REGION
+   BMI_CAT | Northeast    Midwest      South       West |     Total
+-----------+--------------------------------------------+----------
+         1 |        98        111        168        124 |       501 
+         2 |     1,424      1,514      1,674      1,830 |     6,442 
+         3 |     1,047      1,106      1,096      1,169 |     4,418 
+         4 |       497        573        615        536 |     2,221 
+-----------+--------------------------------------------+----------
+     Total |     3,066      3,304      3,553      3,659 |    13,582 
+
+          Pearson chi2(9) =  39.2905   Pr = 0.000
+
+
+regress AGEEXAM i.BMI_CAT
+
+      Source |       SS           df       MS      Number of obs   =    13,582
+-------------+----------------------------------   F(3, 13578)     =     96.41
+       Model |   67748.691         3   22582.897   Prob > F        =    0.0000
+    Residual |  3180520.23    13,578  234.240701   R-squared       =    0.0209
+-------------+----------------------------------   Adj R-squared   =    0.0206
+       Total |  3248268.93    13,581  239.177448   Root MSE        =    15.305
+
+------------------------------------------------------------------------------
+     AGEEXAM |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     BMI_CAT |
+          2  |   .0255998   .7098646     0.04   0.971    -1.365833    1.417033
+          3  |   4.638279   .7215026     6.43   0.000     3.224034    6.052524
+          4  |   4.167788    .756976     5.51   0.000      2.68401    5.651566
+             |
+       _cons |    45.9002   .6837736    67.13   0.000     44.55991    47.24049
+
+
+regress BMI i.BMI_CAT
+
+      Source |       SS           df       MS      Number of obs   =    13,582
+-------------+----------------------------------   F(3, 13578)     =  17861.23
+       Model |  286082.928         3  95360.9761   Prob > F        =    0.0000
+    Residual |  72492.8262    13,578  5.33899147   R-squared       =    0.7978
+-------------+----------------------------------   Adj R-squared   =    0.7978
+       Total |  358575.755    13,581  26.4027505   Root MSE        =    2.3106
+
+------------------------------------------------------------------------------
+         BMI |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     BMI_CAT |
+          2  |    4.67669   .1071702    43.64   0.000     4.466621    4.886758
+          3  |   9.695529   .1089272    89.01   0.000     9.482017    9.909041
+          4  |   16.75761   .1142827   146.63   0.000      16.5336    16.98162
+             |
+       _cons |   17.45917   .1032311   169.13   0.000     17.25682    17.66151
+
+
+tab BMI_CAT, summarize(SYSTOLIC_BP)
+
+            |       Summary of SYSTOLIC_BP
+    BMI_CAT |        Mean   Std. Dev.       Freq.
+------------+------------------------------------
+          1 |   124.24748     23.9259         497
+          2 |   127.78136   22.349532       6,417
+          3 |   136.31063   22.616067       4,404
+          4 |   146.06037   25.649076       2,203
+------------+------------------------------------
+      Total |   133.40781   24.056272      13,521
+
+tab BMI_CAT, summarize(DIASTOLIC_BP)
+
+            |       Summary of DIASTOLIC_BP
+    BMI_CAT |        Mean   Std. Dev.       Freq.
+------------+------------------------------------
+          1 |   76.927565   12.145571         497
+          2 |   79.773344   11.966696       6,415
+          3 |   85.143473    11.95645       4,405
+          4 |   91.326215   13.537016       2,201
+------------+------------------------------------
+      Total |   83.299675   12.990749      13,518
+
+regress SYSTOLIC_BP i.BMI_CAT
+
+      Source |       SS           df       MS      Number of obs   =    13,521
+-------------+----------------------------------   F(3, 13517)     =    397.72
+       Model |  634628.492         3  211542.831   Prob > F        =    0.0000
+    Residual |  7189452.84    13,517  531.882285   R-squared       =    0.0811
+-------------+----------------------------------   Adj R-squared   =    0.0809
+       Total |  7824081.34    13,520  578.704241   Root MSE        =    23.063
+
+------------------------------------------------------------------------------
+ SYSTOLIC_BP |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     BMI_CAT |
+          2  |   3.533877   1.073812     3.29   0.001     1.429056    5.638698
+          3  |   12.06314    1.09131    11.05   0.000     9.924021    14.20226
+          4  |   21.81289    1.14526    19.05   0.000     19.56802    24.05776
+             |
+       _cons |   124.2475   1.034498   120.10   0.000     122.2197    126.2752
+------------------------------------------------------------------------------
+
+. regress DIASTOLIC_BP i.BMI_CAT
+
+      Source |       SS           df       MS      Number of obs   =    13,518
+-------------+----------------------------------   F(3, 13514)     =    571.26
+       Model |  256726.082         3  85575.3607   Prob > F        =    0.0000
+    Residual |  2024396.94    13,514   149.79998   R-squared       =    0.1125
+-------------+----------------------------------   Adj R-squared   =    0.1123
+       Total |  2281123.02    13,517  168.759563   Root MSE        =    12.239
+
+------------------------------------------------------------------------------
+DIASTOLIC_BP |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     BMI_CAT |
+          2  |   2.845778   .5698771     4.99   0.000      1.72874    3.962817
+          3  |   8.215908   .5791504    14.19   0.000     7.080692    9.351124
+          4  |   14.39865   .6078391    23.69   0.000      13.2072     15.5901
+             |
+       _cons |   76.92757   .5490067   140.12   0.000     75.85144     78.0037
+
+
+
+tab BMI_CAT EDUC_CAT, row column
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+|  row percentage   |
+| column percentage |
++-------------------+
+
+           |                  EDUC_CAT
+   BMI_CAT |         1          2          3          4 |     Total
+-----------+--------------------------------------------+----------
+         1 |       227        164         52         58 |       501 
+           |     45.31      32.73      10.38      11.58 |    100.00 
+           |      3.89       3.66       3.31       3.43 |      3.69 
+-----------+--------------------------------------------+----------
+         2 |     2,371      2,266        852        953 |     6,442 
+           |     36.81      35.18      13.23      14.79 |    100.00 
+           |     40.59      50.57      54.30      56.39 |     47.43 
+-----------+--------------------------------------------+----------
+         3 |     2,032      1,376        481        529 |     4,418 
+           |     45.99      31.15      10.89      11.97 |    100.00 
+           |     34.78      30.71      30.66      31.30 |     32.53 
+-----------+--------------------------------------------+----------
+         4 |     1,212        675        184        150 |     2,221 
+           |     54.57      30.39       8.28       6.75 |    100.00 
+           |     20.75      15.06      11.73       8.88 |     16.35 
+-----------+--------------------------------------------+----------
+     Total |     5,842      4,481      1,569      1,690 |    13,582 
+           |     43.01      32.99      11.55      12.44 |    100.00 
+           |    100.00     100.00     100.00     100.00 |    100.00
+
+
+tab BMI_CAT INCOME, row column
+
++-------------------+
+| Key               |
+|-------------------|
+|     frequency     |
+|  row percentage   |
+| column percentage |
++-------------------+
+
+           |                         INCOME
+   BMI_CAT |         1          2          3          4          5 |     Total
+-----------+-------------------------------------------------------+----------
+         1 |       229         80         84         50         58 |       501 
+           |     45.71      15.97      16.77       9.98      11.58 |    100.00 
+           |      4.66       3.05       2.98       3.44       3.27 |      3.69 
+-----------+-------------------------------------------------------+----------
+         2 |     2,030      1,242      1,437        784        949 |     6,442 
+           |     31.51      19.28      22.31      12.17      14.73 |    100.00 
+           |     41.30      47.31      51.05      53.99      53.46 |     47.43 
+-----------+-------------------------------------------------------+----------
+         3 |     1,606        879        903        450        580 |     4,418 
+           |     36.35      19.90      20.44      10.19      13.13 |    100.00 
+           |     32.68      33.49      32.08      30.99      32.68 |     32.53 
+-----------+-------------------------------------------------------+----------
+         4 |     1,050        424        391        168        188 |     2,221 
+           |     47.28      19.09      17.60       7.56       8.46 |    100.00 
+           |     21.36      16.15      13.89      11.57      10.59 |     16.35 
+-----------+-------------------------------------------------------+----------
+     Total |     4,915      2,625      2,815      1,452      1,775 |    13,582 
+           |     36.19      19.33      20.73      10.69      13.07 |    100.00 
+           |    100.00     100.00     100.00     100.00     100.00 |    100.00 
+
+
+tab BMI_CAT EDUC_CAT, chi2
+
+           |                  EDUC_CAT
+   BMI_CAT |         1          2          3          4 |     Total
+-----------+--------------------------------------------+----------
+         1 |       227        164         52         58 |       501 
+         2 |     2,371      2,266        852        953 |     6,442 
+         3 |     2,032      1,376        481        529 |     4,418 
+         4 |     1,212        675        184        150 |     2,221 
+-----------+--------------------------------------------+----------
+     Total |     5,842      4,481      1,569      1,690 |    13,582 
+
+          Pearson chi2(9) = 280.7548   Pr = 0.000
 
