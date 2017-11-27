@@ -1,0 +1,74 @@
+DRAFT!!!!
+
+
+
+generate INC_HD = 0
+
+replace INC_HD = 1 if HEARTDISEASE86 == 1 | HEARTDISEASE87 == 1 | HEARTDISEASE92 == 1 | DEATHCODE == 3
+(2,817 real changes made)
+
+replace INC_HD = . if PREV_HD ==1
+(809 real changes made, 809 to missing)
+
+generate sex = 0
+
+replace sex = 1 if SEX == 2
+(8,597 real changes made)
+
+tab sex
+
+        sex |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      5,810       40.33       40.33
+          1 |      8,597       59.67      100.00
+------------+-----------------------------------
+      Total |     14,407      100.00
+
+keep if PREV_HD == 0
+(819 observations deleted)
+
+generate low_bmi = 0 if BMI_CAT == 2
+(7,146 missing values generated)
+
+. replace low_bmi = 1 if BMI_CAT == 1
+(501 real changes made)
+
+. tab low_bmi
+
+    low_bmi |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      6,442       92.78       92.78
+          1 |        501        7.22      100.00
+------------+-----------------------------------
+      Total |      6,943      100.00
+
+generate overweight = 0 if BMI_CAT == 2
+(7,146 missing values generated)
+
+. replace overweight = 1 if BMI_CAT == 3
+(4,418 real changes made)
+
+. tab overweight
+
+ overweight |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      6,442       59.32       59.32
+          1 |      4,418       40.68      100.00
+------------+-----------------------------------
+      Total |     10,860      100.00
+
+. generate obese = 0 if BMI_CAT == 2
+(7,146 missing values generated)
+
+. replace obese = 1 if BMI_CAT == 4
+(2,221 real changes made)
+
+. tab obese
+
+      obese |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          0 |      6,442       74.36       74.36
+          1 |      2,221       25.64      100.00
+------------+-----------------------------------
+      Total |      8,663      100.00
+
